@@ -2,6 +2,10 @@
     content: 'ID: ';
 }
 
+div[id] {
+    border: 2px solid orangered;
+}
+
 #pokePic::before {
     content: 'Picture: ';
 }
