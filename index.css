@@ -1,0 +1,15 @@
+#pokeID::before {
+    content: 'ID: ';
+}
+
+#pokePic::before {
+    content: 'Picture: ';
+}
+
+#pokeMoves::before {
+    content: 'Moves: ';
+}
+
+#pokeEvo::before {
+    content: 'Evolutions: ';
+}
