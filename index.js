@@ -1,3 +1,5 @@
+/* Create handles to manipulate parts of the interface
+=====================================================*/
 const searchBox = document.getElementById("search");
 const pokeID = document.getElementById("pokeID");
 const pokePic = document.getElementById("pokePic");
@@ -13,9 +15,9 @@ function doSearch(e) {
     let target = "https://pokeapi.co/api/v2/pokemon/" + e.target.value;
     xhr.open("GET", target);
     xhr.responseType = "json";
-    window.scrollTo({top: 0, behavior: "smooth"});
     xhr.send();
     xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
       if (xhr.readyState != 4) {
         console.log("xhr to " + target);
       }
@@ -26,10 +28,18 @@ function doSearch(e) {
           return;
         }
         rawData.innerText = JSON.stringify(xhr.response, null, 5);
+
+        /* Show ID and name
+        ===================*/
         pokeID.innerText = xhr.response.id + ", " + xhr.response.name;
-        console.log(xhr.response.sprites.front_shiny);
+
+        /* Show picture
+        ===============*/
         pokePic.innerHTML =
           "<img src=" + xhr.response.sprites.front_shiny + ">";
+
+        /* Show moves
+        ==============*/
         pokeMoves.innerText = JSON.stringify(xhr.response.moves, null, 5);
         getEvolutions(xhr.response.species.url);
       }
