@@ -1,19 +1,21 @@
 #pokeID::before {
-    content: 'ID: ';
+  content: 'ID: ';
 }
 
 div[id] {
-    border: 2px solid orangered;
+  border: 2px solid orangered;
+  margin: 2rem;
+  padding: 1rem;
 }
 
 #pokePic::before {
-    content: 'Picture: ';
+  content: 'Picture: ';
 }
 
 #pokeMoves::before {
-    content: 'Moves: ';
+  content: 'Moves: ';
 }
 
 #pokeEvo::before {
-    content: 'Evolutions: ';
+  content: 'Evolutions: ';
 }
