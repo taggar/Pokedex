@@ -14,8 +14,8 @@ function doSearch(e) {
     let target = 'https://pokeapi.co/api/v2/pokemon/' + e.target.value;
     console.log('xhr to ' + target);
     doXhrGetJson(target)
-      .then(function(result) {
-        console.log('Result: ' + result);
+      .then(function (result) {
+        // console.log('Result: ' + JSON.stringify(result, null, 5));
         rawData.innerHTML = '<pre>' + JSON.stringify(result, null, 5) + '</pre>';
 
         /* Show ID and name
@@ -24,7 +24,7 @@ function doSearch(e) {
 
         /* Show picture
         ===============*/
-        console.log('pic: ' + JSON.stringify(result.sprites.front_shiny, null, 5));
+        // console.log('pic: ' + JSON.stringify(result.sprites.front_shiny, null, 5));
         pokePic.innerHTML =
           '<img src=' + result.sprites.front_shiny + '>';
 
@@ -35,13 +35,7 @@ function doSearch(e) {
         for (move of result.moves) {
           moves.push(move.move.name);
         }
-        // Console.log(move.move.name);
-        // pokeMoves.innerHTML += '<a href=\'' + move.move.url + '\'>' + move.move.name + '</a>';
-        // Moves.push(move.name);
-        // moves.join(move.name,', ');
-        // pokeMoves.innerHTML += '<pre>' + JSON.stringify(result.moves, null, 5) + '</pre>'
         pokeMoves.innerHTML = moves.join(', ');
-        // PokeMoves.innerHTML = moves;
 
         /* Show previous evolution(s)
         =============================*/
@@ -49,7 +43,7 @@ function doSearch(e) {
         getEvolutions(result);
 
       })
-      .catch(function() {
+      .catch(function () {
         pokeID.innerText = 'Not found ...'
         pokePic.innerHTML = '';
         pokeMoves.innerText = '';
@@ -61,21 +55,32 @@ function doSearch(e) {
 
 function getEvolutions(result) {
   doXhrGetJson(result.species.url)
-    .then(function(result) {
-      pokeEvo.innerText = result.evolves_from_species.name;
+    .then(function (result) {
+      let evo = result.evolves_from_species.name;
+      pokeEvo.innerText = evo;
+      getEvolutionImage(evo);
     })
-    .catch(function() {
+    .catch(function () {
       pokeEvo.innerText = 'None found.';
     });
 }
 
+function getEvolutionImage(evo) {
+  doXhrGetJson('https://pokeapi.co/api/v2/pokemon/' + evo)
+    .then(function (result) {
+      pokeEvo.innerHTML += '<img src=' + result.sprites.front_shiny + '>';
+    })
+    .catch(function () {
+      return;
+    });
+}
 
 /* Function to get an ajax json response
 =======================================*/
 function doXhrGetJson(url) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
+    xhr.onload = function () {
       resolve(this.response);
     };
     xhr.onerror = reject;
