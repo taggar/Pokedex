@@ -1,5 +1,6 @@
 /* Create handles to manipulate parts of the interface
 =====================================================*/
+
 const searchBox = document.getElementById('search');
 const pokeID = document.getElementById('pokeID');
 const pokePic = document.getElementById('pokePic');
@@ -8,37 +9,43 @@ const pokeEvo = document.getElementById('pokeEvo');
 const rawData = document.getElementById('rawData');
 const datalist = document.getElementById('allPokemons');
 
+
+/* Listeners
+=====================================================*/
+
 window.addEventListener('load', getAllPokemons);
 searchBox.addEventListener('keyup', doSearch);
 
+
 function doSearch(e) {
+
   if (e.which === 13 && e.target.value.length > 0) {
+
     let target = 'https://pokeapi.co/api/v2/pokemon/' + e.target.value;
-    console.log('xhr to ' + target);
+
     doXhrGetJson(target)
       .then(function (result) {
-        // console.log('Result: ' + JSON.stringify(result, null, 5));
+
+        /* Show the raw response
+        =======================*/
         rawData.innerHTML = '<pre>' + JSON.stringify(result, null, 5) + '</pre>';
 
         /* Show ID and name
         ===================*/
         pokeID.innerText = result.id + ', ' + result.name;
 
-        /* Show picture
-        ===============*/
-        // console.log('pic: ' + JSON.stringify(result.sprites.front_shiny, null, 5));
-        pokePic.innerHTML = getPictures(result.sprites);
-
-        // pokePic.innerHTML =
-        //   '<img src=' + result.sprites.front_shiny + '>';
+        /* Show pictures
+        ================*/
+        pokePic.innerHTML = getSprites(result.sprites);
 
         /* Show moves
         ==============*/
-        //Console.log('moves: ' + JSON.stringify(result.moves, null, 5));
         let moves = [];
+
         for (move of result.moves) {
           moves.push(move.move.name);
         }
+
         pokeMoves.innerHTML = moves.join(', ');
 
         /* Show previous evolution(s)
@@ -48,6 +55,7 @@ function doSearch(e) {
 
       })
       .catch(function () {
+        // if the ajax call gives no result ...
         pokeID.innerText = 'Not found ...'
         pokePic.innerHTML = '...';
         pokeMoves.innerText = '...';
@@ -58,7 +66,8 @@ function doSearch(e) {
 
 }
 
-function getPictures(sprites) {
+
+function getSprites(sprites) {
   let pictures = '';
   Object.keys(sprites).forEach(function (k) {
     if (sprites[k] != null) {
@@ -70,6 +79,7 @@ function getPictures(sprites) {
   }
   return 'None found';
 }
+
 
 function getEvolutions(result) {
   doXhrGetJson(result.species.url)
@@ -83,11 +93,12 @@ function getEvolutions(result) {
     });
 }
 
+
 function getEvolutionImage(evo) {
   doXhrGetJson('https://pokeapi.co/api/v2/pokemon/' + evo)
     .then(function (result) {
       if (result.sprites.front_shiny != null) {
-        pokeEvo.innerHTML += getPictures(result.sprites);
+        pokeEvo.innerHTML += getSprites(result.sprites);
       }
     })
     .catch(function () {
@@ -95,6 +106,8 @@ function getEvolutionImage(evo) {
     });
 }
 
+/* Get a list of all pokemons to popupate the datalist
+=====================================================*/
 function getAllPokemons() {
   doXhrGetJson('https://pokeapi.co/api/v2/pokemon?offset=0&limit=1')
     .then(
@@ -116,8 +129,8 @@ function getAllPokemons() {
 
 }
 
-/* Function to get an ajax json response
-=======================================*/
+/* Generic function to get an ajax json response
+===============================================*/
 function doXhrGetJson(url) {
   return new Promise(function (resolve, reject) {
     var xhr = new XMLHttpRequest();
