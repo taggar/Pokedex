@@ -6,7 +6,9 @@ const pokePic = document.getElementById('pokePic');
 const pokeMoves = document.getElementById('pokeMoves');
 const pokeEvo = document.getElementById('pokeEvo');
 const rawData = document.getElementById('rawData');
+const datalist = document.getElementById('allPokemons');
 
+window.addEventListener('load', getAllPokemons);
 searchBox.addEventListener('keyup', doSearch);
 
 function doSearch(e) {
@@ -25,8 +27,10 @@ function doSearch(e) {
         /* Show picture
         ===============*/
         // console.log('pic: ' + JSON.stringify(result.sprites.front_shiny, null, 5));
-        pokePic.innerHTML =
-          '<img src=' + result.sprites.front_shiny + '>';
+        pokePic.innerHTML = getPictures(result.sprites);
+
+        // pokePic.innerHTML =
+        //   '<img src=' + result.sprites.front_shiny + '>';
 
         /* Show moves
         ==============*/
@@ -45,12 +49,26 @@ function doSearch(e) {
       })
       .catch(function () {
         pokeID.innerText = 'Not found ...'
-        pokePic.innerHTML = '';
-        pokeMoves.innerText = '';
-        pokeEvo.innerText = '';
+        pokePic.innerHTML = '...';
+        pokeMoves.innerText = '...';
+        pokeEvo.innerText = '...';
 
       });
   }
+
+}
+
+function getPictures(sprites) {
+  let pictures = '';
+  Object.keys(sprites).forEach(function (k) {
+    if (sprites[k] != null) {
+      pictures += `<img src=${sprites[k]}>`;
+    }
+  });
+  if (pictures != '') {
+    return pictures;
+  }
+  return 'None found';
 }
 
 function getEvolutions(result) {
@@ -68,11 +86,34 @@ function getEvolutions(result) {
 function getEvolutionImage(evo) {
   doXhrGetJson('https://pokeapi.co/api/v2/pokemon/' + evo)
     .then(function (result) {
-      pokeEvo.innerHTML += '<img src=' + result.sprites.front_shiny + '>';
+      if (result.sprites.front_shiny != null) {
+        pokeEvo.innerHTML += getPictures(result.sprites);
+      }
     })
     .catch(function () {
       return;
     });
+}
+
+function getAllPokemons() {
+  doXhrGetJson('https://pokeapi.co/api/v2/pokemon?offset=0&limit=1')
+    .then(
+      function (result) {
+        let count = result.count;
+        doXhrGetJson('https://pokeapi.co/api/v2/pokemon?offset=0&limit=' + count)
+          .then(function (result) {
+            result.results.forEach(function (r) {
+              let option = document.createElement('option');
+              option.value = r.name;
+              datalist.appendChild(option);
+            })
+          })
+          .catch(function () {
+            console.log('No result ... ');
+          });
+      }
+    )
+
 }
 
 /* Function to get an ajax json response
