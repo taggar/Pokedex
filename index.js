@@ -42,7 +42,7 @@ function doSearch(e) {
         ==============*/
         let moves = [];
 
-        for (move of result.moves) {
+        for (let move of result.moves) {
           moves.push(move.move.name);
         }
 
