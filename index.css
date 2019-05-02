@@ -1,3 +1,7 @@
+body {
+  background-color: orangered;
+}
+
 #pokeID::before {
   content: 'ID: ';
 }
@@ -6,6 +10,7 @@ div[id] {
   border: 2px solid orangered;
   margin: 2rem;
   padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 #pokePic::before {
