@@ -11,6 +11,7 @@ div[id] {
   margin: 2rem;
   padding: 1rem;
   background-color: rgba(255, 255, 255, 0.8);
+  overflow: scroll;
 }
 
 #pokePic::before {
