@@ -106,7 +106,7 @@ function getEvolutionImage(evo) {
     });
 }
 
-/* Get a list of all pokemons to popupate the datalist
+/* Get a list of all pokemons to populate the datalist
 =====================================================*/
 function getAllPokemons() {
   doXhrGetJson('https://pokeapi.co/api/v2/pokemon?offset=0&limit=1')
