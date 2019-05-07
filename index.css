@@ -3,7 +3,7 @@ body {
 }
 
 #pokeID::before {
-  content: 'ID: ';
+  content: 'ID and name: ';
 }
 
 div[id] {
@@ -11,11 +11,12 @@ div[id] {
   margin: 2rem;
   padding: 1rem;
   background-color: rgba(255, 255, 255, 0.8);
-  overflow: scroll;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 #pokePic::before {
-  content: 'Picture: ';
+  content: 'Pictures: ';
 }
 
 #pokeMoves::before {
@@ -23,5 +24,5 @@ div[id] {
 }
 
 #pokeEvo::before {
-  content: 'Evolutions: ';
+  content: 'Evolved from: ';
 }
