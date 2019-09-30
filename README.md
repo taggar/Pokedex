@@ -16,4 +16,4 @@ Make your webpage look like a pokedex with a little bit css / scss.
 
 ## Result
 
-https://taggar.github.io/Pokedex/
+https://taggar.github.io/pokedex/
